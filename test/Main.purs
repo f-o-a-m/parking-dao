@@ -22,6 +22,7 @@ import Chanterelle.Internal.Types (logDeployError)
 import SimpleStorageSpec (simpleStorageSpec)
 import ParkingAuthoritySpec (parkingAuthoritySpec)
 
+-- | TODO: make the options for deploy config env vars
 main
   :: forall e.
      Eff ( console :: CONSOLE
@@ -33,7 +34,7 @@ main
          | e
          ) Unit
 main = void <<< launchAff $ do
-  edeployConfig <- unsafeCoerceAff <<< runExceptT $ makeDeployConfig
+  edeployConfig <- unsafeCoerceAff <<< runExceptT $ makeDeployConfig "http://localhost:8545" 60
   case edeployConfig of
     Left err -> logDeployError err *> pure unit
     Right deployConfig ->

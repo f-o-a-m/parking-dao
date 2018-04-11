@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0",
+    "purescript-chanterelle": "git+https://github.com/f-o-a-m/chanterelle#v0.3.0",
     "purescript-spec": "^2.0.0"
   }
 }

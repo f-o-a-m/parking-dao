@@ -1,0 +1,13 @@
+/bower_components/
+/node_modules/
+/.pulp-cache/
+/output/
+/.psc-package/
+/.psc*
+/.purs*
+/.psa*
+/src/Contracts/*
+/build/contracts/**/*.json
+*.swp
+/deploy.js
+/compile.js
