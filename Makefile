@@ -10,9 +10,10 @@ build:
 	pulp build
 
 compile-contracts:
-	pulp build --src-path compile -m Compile --to compile.js && node compile.js; rm compile.js
+	pulp run --src-path compile -m Compile
 
 deploy: compile-contracts build
-	pulp build --to deploy.js && node deploy.js; rm deploy.js
+	pulp run
+
 test:
 	pulp test
