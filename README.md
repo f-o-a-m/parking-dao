@@ -1,6 +1,6 @@
-# chanterelle
+# parking-dao
 
-[![Build Status](https://travis-ci.org/f-o-a-m/chanterelle.svg?branch=master)](https://travis-ci.org/f-o-a-m/chanterelle)
+[![Build Status](https://travis-ci.org/f-o-a-m/parking-dao.svg?branch=master)](https://travis-ci.org/f-o-a-m/parking-dao)
 
 <img src=https://github.com/f-o-a-m/purescript-web3/blob/master/purescript-web3-logo.png width="75">
 
