@@ -2,7 +2,7 @@ module Test.Main where
 
 import Prelude
 
-import Chanterelle.Internal.Test (buildTestConfig)
+import Chanterelle.Test (buildTestConfig)
 import Control.Monad.Aff (launchAff)
 import Control.Monad.Aff.AVar (AVAR)
 import Control.Monad.Aff.Console (CONSOLE)

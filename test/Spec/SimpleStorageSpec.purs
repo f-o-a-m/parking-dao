@@ -2,7 +2,7 @@ module SimpleStorageSpec (simpleStorageSpec) where
 
 import Prelude
 
-import Chanterelle.Internal.Test (TestConfig)
+import Chanterelle.Test (TestConfig)
 import Data.Array ((!!))
 import Contracts.SimpleStorage as SimpleStorage
 import Control.Monad.Aff.AVar (AVAR, makeEmptyVar, putVar, takeVar)

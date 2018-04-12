@@ -3,7 +3,7 @@ module ParkingAuthoritySpec (parkingAuthoritySpec) where
 
 import Prelude
 
-import Chanterelle.Internal.Test (TestConfig, assertWeb3, takeEvent)
+import Chanterelle.Test (TestConfig, assertWeb3, takeEvent)
 import Chanterelle.Internal.Utils (pollTransactionReceipt)
 import Contracts.ParkingAnchor as ParkingAnchor
 import Contracts.ParkingAuthority as PA
