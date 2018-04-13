@@ -10,7 +10,7 @@ build:
 	pulp build
 
 compile-contracts:
-	pulp run --src-path compile -m Compile
+	pulp build --src-path compile -m Compile --to compile.js && node compile.js --log-level info; rm compile.js
 
 deploy: compile-contracts build
 	pulp run
