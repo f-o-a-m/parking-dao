@@ -34,6 +34,9 @@ deployScript = do
                                          # _gas ?~ bigGasLimit
   simpleStorage <- deployContract txOpts simpleStorageConfig
   foamCSR <- deployContract txOpts foamCSRConfig
-  let parkingAuthorityConfig = makeParkingAuthorityConfig {foamCSR}
+  let parkingAuthorityConfig = makeParkingAuthorityConfig {foamCSR: foamCSR.deployAddress}
   parkingAuthority <- deployContract txOpts parkingAuthorityConfig
-  pure {foamCSR, simpleStorage, parkingAuthority}
+  pure { foamCSR: foamCSR.deployAddress
+       , simpleStorage: simpleStorage.deployAddress
+       , parkingAuthority: parkingAuthority.deployAddress
+       }
