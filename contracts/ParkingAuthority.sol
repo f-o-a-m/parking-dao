@@ -1,9 +1,9 @@
 pragma solidity ^0.4.13;
 
 /*
-  The ParkingAuthority is the governing contract for ParkingDOA. It holds two important pieces of data--
+  The ParkingAuthority is the governing contract for ParkingDAO. It holds two important pieces of data--
   the ParkingCSR, which is the crypto-spatial registry contract for all ParkingAnchors, and the user membership
-  list, which keeps track of all of the registered users of the DOA. It has the sole authority to extend these
+  list, which keeps track of all of the registered users of the DAO. It has the sole authority to extend these
   two registries.
 */
 
