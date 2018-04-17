@@ -13,7 +13,7 @@ The Parking DAO is a set of smart contracts that encapsulate a `User`, represent
 For more information about how to use the contracts, see [this README](https://github.com/f-o-a-m/parking-dao/blob/master/sequence-diagrams/README.md), or look at the contracts in the `/contracts` directory. You can find the tests in `/test` that verify their behaviour.
 
 ## Build / Test / Deploy
-This is a chanterelle project, so you should see that page for specific information about how to alter the chanterelle.json if you wish to make changes to this project. Otherwise the workflow is dictated by the `Makefile`:
+This is a chanterelle project, so you should see that page for specific information about how to alter the `chanterelle.json` if you wish to make changes to this project. Otherwise the workflow is dictated by the `Makefile`:
 
 ```bash
 > make install
