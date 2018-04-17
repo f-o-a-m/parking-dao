@@ -3,8 +3,8 @@ module ParkingAuthoritySpec (parkingAuthoritySpec) where
 
 import Prelude
 
-import Chanterelle.Test (TestConfig, assertWeb3, takeEvent)
 import Chanterelle.Internal.Utils (pollTransactionReceipt)
+import Chanterelle.Test (TestConfig, assertWeb3, takeEvent)
 import Contracts.ParkingAnchor as ParkingAnchor
 import Contracts.ParkingAuthority as PA
 import Contracts.User as User
@@ -18,9 +18,11 @@ import Data.Lens.Setter ((?~))
 import Data.Maybe (Maybe(..))
 import Data.String (take)
 import Data.Tuple (Tuple(..))
+import Network.Ethereum.Core.BigNumber (decimal, parseBigNumber)
+import Network.Ethereum.Core.Keccak256 (keccak256)
 import Network.Ethereum.Web3.Api (eth_getAccounts)
 import Network.Ethereum.Web3.Solidity (BytesN, D2, D3, D4, D8, type (:&), fromByteString)
-import Network.Ethereum.Web3.Types (Address, BigNumber, ChainCursor(..), TransactionReceipt(..), ETH, Web3, _from, _gas, _to, decimal, _value, defaultTransactionOptions, parseBigNumber, sha3, unHex, embed, fromWei)
+import Network.Ethereum.Web3.Types (Address, BigNumber, ChainCursor(..), TransactionReceipt(..), ETH, Web3, _from, _gas, _to, _value, defaultTransactionOptions, embed, fromWei)
 import Node.FS.Aff (FS)
 import Partial.Unsafe (unsafeCrashWith)
 import Test.Spec (Spec, describe, it)
@@ -66,7 +68,7 @@ parkingAuthoritySpec testCfg@{provider, accounts, foamCSR, parkingAuthority} = d
       liftAff $ zone `shouldEqual` eventZone
 
     it "can create an anchor, and that anchor is owned by the right account" $ assertWeb3 provider do
-      let _anchorId = case fromByteString =<< BS.fromString (unHex $ sha3 "I'm an anchor!") BS.Hex of
+      let _anchorId = case fromByteString $ keccak256 "I'm an anchor!" of
             Just x -> x
             Nothing -> unsafeCrashWith "anchorId should result in valid BytesN 32"
           _geohash = case fromByteString =<< BS.fromString ("0123456701234567") BS.Hex of
@@ -76,7 +78,7 @@ parkingAuthoritySpec testCfg@{provider, accounts, foamCSR, parkingAuthority} = d
 
     it "can create a user and an anchor, the user requests permission at the anchor, then parks there, but not another zone" $ assertWeb3 provider do
       userResult <- createUser testCfg 1
-      let _anchorId = case fromByteString =<< BS.fromString (unHex $ sha3 "I'm an anchor!") BS.Hex of
+      let _anchorId = case fromByteString $ keccak256 "I'm an anchor!" of
             Just x -> x
             Nothing -> unsafeCrashWith "anchorId should result in valid BytesN 32"
           geohashString = "0123456701234567"
