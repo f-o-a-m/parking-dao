@@ -5,29 +5,30 @@ module ContractConfig
   ) where
 
 import Prelude
+
+import Chanterelle.Internal.Types (ContractConfig, NoArgs, noArgs, constructorNoArgs)
+import Contracts.ParkingAuthority as ParkingAuthority
+import Contracts.SimpleStorage as SimpleStorage
 import Data.Maybe (Maybe(..))
 import Data.Validation.Semigroup (V, invalid)
+import Network.Ethereum.Web3.Solidity (type (:&), type (:%), UIntN, D2, D5, D6, uIntNFromBigNumber)
+import Network.Ethereum.Web3.Solidity.Sizes (s256)
 import Network.Ethereum.Web3.Types (Address, embed)
-import Network.Ethereum.Web3.Solidity (type (:&), UIntN, D2, D5, D6, uIntNFromBigNumber)
-
-import Contracts.SimpleStorage as SimpleStorage
-import Contracts.ParkingAuthority as ParkingAuthority
-import Chanterelle.Internal.Types (ContractConfig, NoArgs, noArgs, constructorNoArgs)
 
 --------------------------------------------------------------------------------
 -- | SimpleStorage
 --------------------------------------------------------------------------------
 
 simpleStorageConfig
-  :: ContractConfig (_count :: UIntN (D2 :& D5 :& D6))
+  :: ContractConfig (_count :: UIntN (D2 :& D5 :% D6))
 simpleStorageConfig =
-    { filepath : "./build/contracts/SimpleStorage.json"
+    { filepath : "./build/SimpleStorage.json"
     , name : "SimpleStorage"
     , constructor : SimpleStorage.constructor
     , unvalidatedArgs : {_count: _} <$> validCount
     }
   where
-    validCount = uIntNFromBigNumber (embed 1234) ?? "SimpleStorage: _count must be valid uint"
+    validCount = uIntNFromBigNumber s256 (embed 1234) ?? "SimpleStorage: _count must be valid uint"
 
 --------------------------------------------------------------------------------
 -- | FoamCSR
@@ -36,7 +37,7 @@ simpleStorageConfig =
 foamCSRConfig
   :: ContractConfig NoArgs
 foamCSRConfig =
-  { filepath : "./build/contracts/FoamCSR.json"
+  { filepath : "./build/FoamCSR.json"
   , name : "FoamCSR"
   , constructor : constructorNoArgs
   , unvalidatedArgs : noArgs
@@ -50,7 +51,7 @@ makeParkingAuthorityConfig
   :: {foamCSR :: Address}
   -> ContractConfig (foamCSR :: Address)
 makeParkingAuthorityConfig addressR =
-  { filepath : "./build/contracts/ParkingAuthority.json"
+  { filepath : "./build/ParkingAuthority.json"
   , name : "ParkingAuthority"
   , constructor : ParkingAuthority.constructor
   , unvalidatedArgs : pure addressR
