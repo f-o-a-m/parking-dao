@@ -21,7 +21,8 @@ import Data.Tuple (Tuple(..))
 import Network.Ethereum.Core.BigNumber (decimal, parseBigNumber)
 import Network.Ethereum.Core.Keccak256 (keccak256)
 import Network.Ethereum.Web3.Api (eth_getAccounts)
-import Network.Ethereum.Web3.Solidity (BytesN, D2, D3, D4, D8, type (:&), fromByteString)
+import Network.Ethereum.Web3.Solidity (BytesN, fromByteString)
+import Network.Ethereum.Web3.Solidity.Sizes (S256, S32, S4, S8, s32, s4, s8)
 import Network.Ethereum.Web3.Types (Address, BigNumber, ChainCursor(..), TransactionReceipt(..), ETH, Web3, _from, _gas, _to, _value, defaultTransactionOptions, embed, fromWei)
 import Node.FS.Aff (FS)
 import Partial.Unsafe (unsafeCrashWith)
@@ -55,8 +56,8 @@ parkingAuthoritySpec testCfg@{provider, accounts, foamCSR, parkingAuthority} = d
     it "can create a user and that user can request more zones from the authority" $ assertWeb3 provider do
       {user, owner} <- createUser testCfg 1
       let
-        zone :: BytesN D4
-        zone = case fromByteString =<< BS.fromString "01234567" BS.Hex of
+        zone :: BytesN S4
+        zone = case fromByteString s4 =<< BS.fromString "01234567" BS.Hex of
           Just x -> x
           Nothing -> unsafeCrashWith "zone should result in valid BytesN D4"
         txOpts = defaultTransactionOptions # _from ?~ owner
@@ -68,27 +69,27 @@ parkingAuthoritySpec testCfg@{provider, accounts, foamCSR, parkingAuthority} = d
       liftAff $ zone `shouldEqual` eventZone
 
     it "can create an anchor, and that anchor is owned by the right account" $ assertWeb3 provider do
-      let _anchorId = case fromByteString $ keccak256 "I'm an anchor!" of
+      let _anchorId = case fromByteString s32 $ keccak256 "I'm an anchor!" of
             Just x -> x
             Nothing -> unsafeCrashWith "anchorId should result in valid BytesN 32"
-          _geohash = case fromByteString =<< BS.fromString ("0123456701234567") BS.Hex of
+          _geohash = case fromByteString s8 =<< BS.fromString ("0123456701234567") BS.Hex of
             Just x -> x
             Nothing -> unsafeCrashWith "geohash should result in valid BytesN 8"
       void $ createParkingAnchor testCfg 2 {_geohash, _anchorId}
 
     it "can create a user and an anchor, the user requests permission at the anchor, then parks there, but not another zone" $ assertWeb3 provider do
       userResult <- createUser testCfg 1
-      let _anchorId = case fromByteString $ keccak256 "I'm an anchor!" of
+      let _anchorId = case fromByteString s32 $ keccak256 "I'm an anchor!" of
             Just x -> x
             Nothing -> unsafeCrashWith "anchorId should result in valid BytesN 32"
           geohashString = "0123456701234567"
-          _geohash = case fromByteString =<< BS.fromString geohashString BS.Hex of
+          _geohash = case fromByteString s8 =<< BS.fromString geohashString BS.Hex of
             Just x -> x
             Nothing -> unsafeCrashWith "geohash should result in valid BytesN 8"
       parkingAnchorResult <- createParkingAnchor testCfg 2 {_geohash, _anchorId}
       let
         zoneStr = take 8 geohashString
-        zone = case fromByteString =<< BS.fromString zoneStr BS.Hex of
+        zone = case fromByteString s4 =<< BS.fromString zoneStr BS.Hex of
           Just x -> x
           Nothing -> unsafeCrashWith "zone should result in valid BytesN D4"
         txOpts = defaultTransactionOptions # _from ?~ userResult.owner
@@ -104,8 +105,8 @@ parkingAuthoritySpec testCfg@{provider, accounts, foamCSR, parkingAuthority} = d
 
       badUserResult <- createUser testCfg 3
       let
-        badZone :: BytesN D4
-        badZone = case fromByteString =<< BS.fromString "00000000" BS.Hex of
+        badZone :: BytesN S4
+        badZone = case fromByteString s4 =<< BS.fromString "00000000" BS.Hex of
           Just x -> x
           Nothing -> unsafeCrashWith "zone should result in valid BytesN D4"
 
@@ -151,8 +152,8 @@ createParkingAnchor
      TestConfig (parkingAuthority :: Address | r)
   -> Int
   -- ^ the index for the account to use for transactions
-  -> {_geohash :: BytesN D8, _anchorId :: BytesN (D3 :& D2)}
-  -> Web3 (fs :: FS, console :: CONSOLE, avar :: AVAR | eff) {owner :: Address, anchor :: Address, anchorId :: BytesN (D3 :& D2) , geohash :: BytesN D8}
+  -> {_geohash :: BytesN S8, _anchorId :: BytesN S32 }
+  -> Web3 (fs :: FS, console :: CONSOLE, avar :: AVAR | eff) {owner :: Address, anchor :: Address, anchorId :: BytesN S32 , geohash :: BytesN S8}
 createParkingAnchor testConfig accountIndex args = do
   accounts <- eth_getAccounts
   let
@@ -192,9 +193,9 @@ registerAnchor
   :: forall eff r.
      Address
   -- ^ from address
-  -> {_geohash :: BytesN D8, _anchorId :: BytesN (D3 :& D2)}
+  -> {_geohash :: BytesN S8, _anchorId :: BytesN S32 }
   -> TestConfig (parkingAuthority :: Address | r)
-  -> Web3 (fs :: FS, console :: CONSOLE, avar :: AVAR | eff) {owner :: Address, anchor :: Address, anchorId :: BytesN (D3 :& D2) , geohash :: BytesN D8}
+  -> Web3 (fs :: FS, console :: CONSOLE, avar :: AVAR | eff) {owner :: Address, anchor :: Address, anchorId :: BytesN S32 , geohash :: BytesN S8 }
 registerAnchor fromAccount args {provider, parkingAuthority} = do
   let txOpts = defaultTransactionOptions # _from ?~ fromAccount
                                          # _gas ?~ bigGasLimit

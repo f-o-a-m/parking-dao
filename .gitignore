@@ -6,8 +6,8 @@
 /.psc*
 /.purs*
 /.psa*
-/src/Contracts/*
-/build/contracts/**/*.json
+src/Contracts/*
+/build/**/*.json
 *.swp
 /deploy.js
 /compile.js
