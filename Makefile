@@ -15,5 +15,5 @@ compile-contracts:
 deploy: compile-contracts build
 	pulp run
 
-test:
+test: compile-contracts
 	pulp test

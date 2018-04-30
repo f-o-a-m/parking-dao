@@ -8,11 +8,11 @@
   ],
   "dependencies": {
     "purescript-prelude": "^3.1.1",
-    "purescript-web3": "^0.21.0"
+    "purescript-web3": "^0.22.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0",
-    "purescript-chanterelle": "f-o-a-m/chanterelle#v0.7.0",
+    "purescript-chanterelle": "f-o-a-m/chanterelle#v0.8.3",
     "purescript-spec": "^2.0.0"
   }
 }
