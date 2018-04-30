@@ -20,9 +20,10 @@ import Data.String (take)
 import Data.Tuple (Tuple(..))
 import Network.Ethereum.Core.BigNumber (decimal, parseBigNumber)
 import Network.Ethereum.Core.Keccak256 (keccak256)
+import Network.Ethereum.Web3 (TransactionStatus(..))
 import Network.Ethereum.Web3.Api (eth_getAccounts)
 import Network.Ethereum.Web3.Solidity (BytesN, fromByteString)
-import Network.Ethereum.Web3.Solidity.Sizes (S256, S32, S4, S8, s32, s4, s8)
+import Network.Ethereum.Web3.Solidity.Sizes (S32, S4, S8, s32, s4, s8)
 import Network.Ethereum.Web3.Types (Address, BigNumber, ChainCursor(..), TransactionReceipt(..), ETH, Web3, _from, _gas, _to, _value, defaultTransactionOptions, embed, fromWei)
 import Node.FS.Aff (FS)
 import Partial.Unsafe (unsafeCrashWith)
@@ -116,9 +117,7 @@ parkingAuthoritySpec testCfg@{provider, accounts, foamCSR, parkingAuthority} = d
                                               # _value ?~ fromWei (embed 1)
       badHash <- User.payForParking badTxOpts {_anchor: parkingAnchorResult.anchor}
       (TransactionReceipt txReceipt) <- liftAff $ pollTransactionReceipt badHash provider
-      liftAff $ txReceipt.status `shouldEqual` "0x0"
-
-
+      liftAff $ txReceipt.status `shouldEqual` Failed
 
 --------------------------------------------------------------------------------
 -- | SetupTests
